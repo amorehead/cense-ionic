@@ -1,0 +1,7 @@
+{
+  "name": "Cense",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
