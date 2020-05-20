@@ -1,0 +1,22 @@
+{
+  "name": "cense-ionic",
+  "version": "1.0.0",
+  "description": "Helping facilitate sensical personal finance practices.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amorehead/cense-ionic.git"
+  },
+  "keywords": [
+    "finance"
+  ],
+  "author": "amorehead",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/amorehead/cense-ionic/issues"
+  },
+  "homepage": "https://github.com/amorehead/cense-ionic#readme"
+}
