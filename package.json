@@ -21,6 +21,8 @@
   "homepage": "https://github.com/amorehead/cense-ionic#readme",
   "dependencies": {
     "@ionic/cli": "^6.9.2",
-    "cordova-res": "^0.14.0"
+    "cordova-res": "^0.14.0",
+    "file-saver": "^2.0.2",
+    "xlsx": "^0.16.1"
   }
 }
