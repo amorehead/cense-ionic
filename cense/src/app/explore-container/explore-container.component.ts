@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
-import * as FileSaver from 'file-saver';
+import { AccountService } from '../services/account.service';
 
 @Component({
   selector: 'app-explore-container',
@@ -13,56 +13,46 @@ export class ExploreContainerComponent implements OnInit {
   jsonData: any;
   textData: any;
   htmlData: any;
-  uploadedFile: File;
   worksheet: any;
 
-  constructor() { }
+  constructor(public accountService: AccountService) { }
 
   ngOnInit() { }
 
-  storeUploadedFile(event: any) {
-    this.uploadedFile = event.target.files[0];
-    this.readXLSXFile();
+  onFileChange(event: any) {
+    /* Wire up file reader */
+    const target: DataTransfer = <DataTransfer>(event.target);
+    if (target.files.length > 1) throw new Error('Cannot use multiple files.');
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      /* Read workbook */
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+      /* Grab first sheet */
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+      /* Save data */
+      this.accountService.uploadedFile = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+    };
+    reader.readAsBinaryString(target.files[0]);
+    this.populateGridWithAccountsData()
   }
 
-  readXLSXFile() {
-    let readFile = new FileReader();
-    readFile.onload = (e) => {
-      this.storeData = readFile.result;
-      var data = new Uint8Array(this.storeData);
-      var arr = new Array();
-      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-      debugger
-      var bstr = arr.join("");
-      var workbook = XLSX.read(bstr, { type: "binary" });
-      var first_sheet_name = workbook.SheetNames[0];
-      this.worksheet = workbook.Sheets[first_sheet_name];
-    }
-    readFile.readAsArrayBuffer(this.uploadedFile);
+  populateGridWithAccountsData() {
+
   }
 
-  readAsCSV() {
-    this.csvData = XLSX.utils.sheet_to_csv(this.worksheet);
-    const data: Blob = new Blob([this.csvData], { type: 'text/csv;charset=utf-8;' });
-    FileSaver.saveAs(data, "CSVFile" + new Date().getTime() + '.csv');
-  }
+  saveAccountsDataToFile() {
+    /* Generate worksheet */
+    const worksheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(this.accountService.uploadedFile);
 
-  readAsJson() {
-    this.jsonData = XLSX.utils.sheet_to_json(this.worksheet, { raw: false });
-    this.jsonData = JSON.stringify(this.jsonData);
-    const data: Blob = new Blob([this.jsonData], { type: "application/json" });
-    FileSaver.saveAs(data, "JsonFile" + new Date().getTime() + '.json');
-  }
+    /* Generate workbook and add the worksheet */
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
 
-  readAsHTML() {
-    this.htmlData = XLSX.utils.sheet_to_html(this.worksheet);
-    const data: Blob = new Blob([this.htmlData], { type: "text/html;charset=utf-8;" });
-    FileSaver.saveAs(data, "HtmlFile" + new Date().getTime() + '.html');
-  }
-
-  readAsText() {
-    this.textData = XLSX.utils.sheet_to_txt(this.worksheet);
-    const data: Blob = new Blob([this.textData], { type: 'text/plain;charset=utf-8;' });
-    FileSaver.saveAs(data, "TextFile" + new Date().getTime() + '.txt');
+    /* Save to file */
+    XLSX.writeFile(workbook, 'Accounts.xlsx');
   }
 }

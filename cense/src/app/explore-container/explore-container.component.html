@@ -1,11 +1,13 @@
 <div id="container">
   <strong>Welcome to Cense</strong>
-  <p>Download Template <a target="_blank" rel="noopener noreferrer"
-      href="https://amorehead.github.io/assets/spreadsheets/Template.xlsx">
+  <p>
+    Download Template
+    <a target="_blank" rel="noopener noreferrer" href="https://amorehead.github.io/assets/spreadsheets/Template.xlsx">
       <ion-icon name="cloud-download-outline"></ion-icon>
     </a>
-    |
-    <input type="file" (change)="storeUploadedFile($event)" accept=".xlsx" id="fileInput">
+  </p>
+  <p>
+    <input type="file" (change)="onFileChange($event)" multiple="false" accept=".xlsx" id="fileInput">
     <label for="fileInput" icon-only ion-button>
       Upload Account(s)
       <a id="uploadIcon">
