@@ -34,7 +34,8 @@ export class ExploreContainerComponent implements OnInit {
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
       /* Save data */
-      this.accountService.uploadedFile = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+      // this.accountService.uploadedFile = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+      this.accountService.uploadedFile = <any>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
     };
     reader.readAsBinaryString(target.files[0]);
     this.populateGridWithAccountsData()
