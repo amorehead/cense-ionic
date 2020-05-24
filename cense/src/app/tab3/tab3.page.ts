@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { AccountService } from '../services/account.service';
+import { GridOptions, ColDef } from 'ag-grid-community';
+import { IAccountData } from '../shared/account/account-data/iaccount-data';
 
 @Component({
   selector: 'app-tab3',
@@ -7,19 +9,33 @@ import { AccountService } from '../services/account.service';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
+  savingsRowData: Array<IAccountData> = []
+  checkingRowData: Array<IAccountData> = []
 
-  columnDefs = [
-    { headerName: 'Make', field: 'make' },
-    { headerName: 'Model', field: 'model' },
-    { headerName: 'Price', field: 'price' }
-  ];
+  savingsGridOptions: GridOptions = {
+    columnDefs: this.getColumnDefs(0)
+  }
 
-  rowData = [
-    { make: 'Toyota', model: 'Celica', price: 35000 },
-    { make: 'Ford', model: 'Mondeo', price: 32000 },
-    { make: 'Porsche', model: 'Boxter', price: 72000 }
-  ];
+  checkingGridOptions: GridOptions = {
+    columnDefs: this.getColumnDefs(2)
+  }
 
   constructor(public accountService: AccountService) { }
 
+  getColumnDefs(columnIndex: number): Array<ColDef> {
+    const columnDefs = []
+
+    for (let i = 0; i < this.accountService.uploadedFile.length; i++) {
+      const row = this.accountService.uploadedFile[i]
+      if (row.length > 0) {
+        if (typeof row[columnIndex] === 'string') {
+          columnDefs.push({ headerName: row[columnIndex], field: 'value' })
+        } else if (typeof row[columnIndex] === 'number') {
+          columnIndex === 0 ? this.savingsRowData.push({ value: row[columnIndex] }) : this.checkingRowData.push({ value: row[columnIndex] })
+        }
+      }
+    }
+
+    return columnDefs
+  }
 }

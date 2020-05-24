@@ -13,15 +13,11 @@
     </ion-toolbar>
   </ion-header>
 
-  <!-- <table class="sjs-table">
-    <tr *ngFor="let row of accountService.uploadedFile">
-      <td *ngFor="let cellValue of row">
-        {{ cellValue }}
-      </td>
-    </tr>
-  </table> -->
+  <ag-grid-angular style="width: 500px; height: 500px;" class="ag-theme-alpine" [rowData]="savingsRowData"
+    [gridOptions]="savingsGridOptions">
+  </ag-grid-angular>
 
-  <ag-grid-angular style="width: 500px; height: 500px;" class="ag-theme-alpine" [rowData]="rowData"
-    [columnDefs]="columnDefs">
+  <ag-grid-angular style="width: 500px; height: 500px;" class="ag-theme-alpine" [rowData]="checkingRowData"
+    [gridOptions]="checkingGridOptions">
   </ag-grid-angular>
 </ion-content>
