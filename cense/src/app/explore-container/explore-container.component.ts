@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
-import { AccountService } from '../services/account.service';
+import { AccountService } from '../shared/account/account.service';
 
 @Component({
   selector: 'app-explore-container',
@@ -38,22 +38,10 @@ export class ExploreContainerComponent implements OnInit {
       this.accountService.uploadedFile = <any>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
     };
     reader.readAsBinaryString(target.files[0]);
-    this.populateGridWithAccountsData()
+    this.checkForUploadedAccounts()
   }
 
-  populateGridWithAccountsData() {
-
-  }
-
-  saveAccountsDataToFile() {
-    /* Generate worksheet */
-    const worksheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(this.accountService.uploadedFile);
-
-    /* Generate workbook and add the worksheet */
-    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-
-    /* Save to file */
-    XLSX.writeFile(workbook, 'Accounts.xlsx');
+  checkForUploadedAccounts() {
+    this.accountService.uploadedFile ? this.accountService.userNeedsToUploadAccountsSpreadsheet = false : this.accountService.userNeedsToUploadAccountsSpreadsheet = true
   }
 }

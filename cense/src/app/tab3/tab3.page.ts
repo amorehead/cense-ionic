@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { AccountService } from '../services/account.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AccountService } from '../shared/account/account.service';
 import { GridOptions, ColDef } from 'ag-grid-community';
 import { IAccountData } from '../shared/account/account-data/iaccount-data';
 
@@ -25,16 +25,20 @@ export class Tab3Page {
   getColumnDefs(columnIndex: number): Array<ColDef> {
     const columnDefs = []
 
-    for (let i = 0; i < this.accountService.uploadedFile.length; i++) {
-      const row = this.accountService.uploadedFile[i]
-      if (row.length > 0) {
-        if (typeof row[columnIndex] === 'string') {
-          columnDefs.push({ headerName: row[columnIndex], field: 'value' })
-        } else if (typeof row[columnIndex] === 'number') {
-          columnIndex === 0 ? this.savingsRowData.push({ value: row[columnIndex] }) : this.checkingRowData.push({ value: row[columnIndex] })
+    // Ensure the user has already uploaded their accounts spreadsheet
+    if (this.accountService.uploadedFile) {
+      for (let i = 0; i < this.accountService.uploadedFile.length; i++) {
+        const row = this.accountService.uploadedFile[i]
+        if (row.length > 0) {
+          if (typeof row[columnIndex] === 'string') {
+            columnDefs.push({ headerName: row[columnIndex], field: 'value' })
+          } else if (typeof row[columnIndex] === 'number') {
+            columnIndex === 0 ? this.savingsRowData.push({ value: row[columnIndex] }) : this.checkingRowData.push({ value: row[columnIndex] })
+          }
         }
       }
-    }
+      this.accountService.userNeedsToUploadAccountsSpreadsheet = false
+    } else this.accountService.userNeedsToUploadAccountsSpreadsheet = true
 
     return columnDefs
   }

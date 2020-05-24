@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { FormsModule } from '@angular/forms';
 import { AgGridModule } from 'ag-grid-angular'
-import { AccountService } from '../services/account.service';
+import { AccountService } from './account/account.service';
 
 @NgModule({
     imports: [

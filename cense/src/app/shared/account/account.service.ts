@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class AccountService {
   uploadedFile: any
+  userNeedsToUploadAccountsSpreadsheet = false
 
   constructor() { }
 }
