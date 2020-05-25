@@ -24,6 +24,8 @@ export class AccountsPage {
 
   getColumnDefs(columnIndex: number): Array<ColDef> {
     const columnDefs = []
+    const populatingSavingsAccount = columnIndex === 0
+    let accountRow: IAccountData = {}
 
     // Ensure the user has already uploaded their accounts spreadsheet
     if (this.accountService.uploadedFile) {
@@ -31,15 +33,30 @@ export class AccountsPage {
         const row = this.accountService.uploadedFile[i]
         if (row.length > 0) {
           if (typeof row[columnIndex] === 'string') {
-            columnDefs.push({ headerName: row[columnIndex], field: 'value' })
+            columnDefs.push({ headerName: row[columnIndex], field: `r${i + 1}:c${columnIndex}` })
           } else if (typeof row[columnIndex] === 'number') {
-            columnIndex === 0 ? this.savingsRowData.push({ value: row[columnIndex] }) : this.checkingRowData.push({ value: row[columnIndex] })
+            accountRow[`r${i}:c${columnIndex}`] = row[columnIndex]
           }
         }
       }
+      populatingSavingsAccount ? this.savingsRowData.push(accountRow) : this.checkingRowData.push(accountRow)
       this.accountService.userNeedsToUploadAccountsSpreadsheet = false
     } else this.accountService.userNeedsToUploadAccountsSpreadsheet = true
 
     return columnDefs
+  }
+
+  getCSVExportParams() {
+    return {
+      suppressQuotes: false,
+      columnSeparator: 'tab',
+      customHeader: null,
+      customFooter: null,
+    };
+  }
+
+  downloadDataAsCSV() {
+    const params = this.getCSVExportParams()
+    this.savingsGridOptions.api.getDataAsCsv(params)
   }
 }

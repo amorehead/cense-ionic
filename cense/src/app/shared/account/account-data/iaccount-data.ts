@@ -1,3 +1,3 @@
 export interface IAccountData {
-    value: number
+    [key: string]: any
 }

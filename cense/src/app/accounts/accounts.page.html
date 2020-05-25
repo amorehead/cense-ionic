@@ -14,11 +14,14 @@
   </ion-header>
 
   <div *ngIf="!accountService.userNeedsToUploadAccountsSpreadsheet; else noAccountsTemplate">
-    <ag-grid-angular style="width: 500px; height: 500px;" class="ag-theme-alpine" [rowData]="savingsRowData"
+    <ion-button (click)="downloadDataAsCSV()">
+      Export
+    </ion-button>
+    <ag-grid-angular style="height: 110px;" class="ag-theme-alpine" [rowData]="savingsRowData"
       [gridOptions]="savingsGridOptions">
     </ag-grid-angular>
 
-    <ag-grid-angular style="width: 500px; height: 500px;" class="ag-theme-alpine" [rowData]="checkingRowData"
+    <ag-grid-angular style="height: 110px;" class="ag-theme-alpine" [rowData]="checkingRowData"
       [gridOptions]="checkingGridOptions">
     </ag-grid-angular>
   </div>
