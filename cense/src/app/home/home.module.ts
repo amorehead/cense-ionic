@@ -1,9 +1,9 @@
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
-import { Tab2Page } from './tab2.page';
-import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
+import { HomePage } from './home.page';
+import { SpreadsheetContainerComponentModule } from '../spreadsheet-container/spreadsheet-container.module';
 
-import { Tab2PageRoutingModule } from './tab2-routing.module';
+import { HomePageRoutingModule } from './home-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,12 +11,12 @@ import { FormsModule } from '@angular/forms';
 @NgModule({
   imports: [
     IonicModule,
-    ExploreContainerComponentModule,
-    Tab2PageRoutingModule,
+    SpreadsheetContainerComponentModule,
+    HomePageRoutingModule,
     SharedModule,
     CommonModule,
     FormsModule
   ],
-  declarations: [Tab2Page]
+  declarations: [HomePage]
 })
-export class Tab2PageModule { }
+export class HomePageModule { }

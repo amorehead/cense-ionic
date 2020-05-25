@@ -3,17 +3,11 @@ import * as XLSX from 'xlsx';
 import { AccountService } from '../shared/account/account.service';
 
 @Component({
-  selector: 'app-explore-container',
-  templateUrl: './explore-container.component.html',
-  styleUrls: ['./explore-container.component.scss'],
+  selector: 'app-spreadsheet-container',
+  templateUrl: './spreadsheet-container.component.html',
+  styleUrls: ['./spreadsheet-container.component.scss'],
 })
-export class ExploreContainerComponent implements OnInit {
-  storeData: any;
-  csvData: any;
-  jsonData: any;
-  textData: any;
-  htmlData: any;
-  worksheet: any;
+export class SpreadsheetContainerComponent implements OnInit {
 
   constructor(public accountService: AccountService) { }
 

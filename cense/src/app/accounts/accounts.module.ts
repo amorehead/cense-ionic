@@ -1,10 +1,10 @@
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { Tab3Page } from './tab3.page';
-import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
+import { AccountsPage } from './accounts.page';
+import { SpreadsheetContainerComponentModule } from '../spreadsheet-container/spreadsheet-container.module';
 
-import { Tab3PageRoutingModule } from './tab3-routing.module'
+import { AccountsPageRoutingModule } from './accounts-routing.module'
 import { AgGridModule } from 'ag-grid-angular';
 import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
@@ -15,12 +15,12 @@ import { FormsModule } from '@angular/forms';
     IonicModule,
     CommonModule,
     FormsModule,
-    ExploreContainerComponentModule,
-    RouterModule.forChild([{ path: '', component: Tab3Page }]),
-    Tab3PageRoutingModule,
+    SpreadsheetContainerComponentModule,
+    RouterModule.forChild([{ path: '', component: AccountsPage }]),
+    AccountsPageRoutingModule,
     AgGridModule,
     SharedModule
   ],
-  declarations: [Tab3Page]
+  declarations: [AccountsPage]
 })
-export class Tab3PageModule { }
+export class AccountsPageModule { }

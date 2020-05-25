@@ -1,14 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { AccountService } from '../shared/account/account.service';
 import { GridOptions, ColDef } from 'ag-grid-community';
 import { IAccountData } from '../shared/account/account-data/iaccount-data';
 
 @Component({
-  selector: 'app-tab3',
-  templateUrl: 'tab3.page.html',
-  styleUrls: ['tab3.page.scss']
+  selector: 'app-accounts',
+  templateUrl: 'accounts.page.html',
+  styleUrls: ['accounts.page.scss']
 })
-export class Tab3Page {
+export class AccountsPage {
   savingsRowData: Array<IAccountData> = []
   checkingRowData: Array<IAccountData> = []
 
