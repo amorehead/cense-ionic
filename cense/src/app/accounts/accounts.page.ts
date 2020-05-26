@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AccountService } from '../shared/account/account.service';
 import { GridOptions, ColDef } from 'ag-grid-community';
-import { IAccountData } from '../shared/account/account-data/iaccount-data';
+import { ILooseType } from '../shared/iloose-type';
 
 @Component({
   selector: 'app-accounts',
@@ -9,54 +9,66 @@ import { IAccountData } from '../shared/account/account-data/iaccount-data';
   styleUrls: ['accounts.page.scss']
 })
 export class AccountsPage {
-  savingsRowData: Array<IAccountData> = []
-  checkingRowData: Array<IAccountData> = []
+  accountsRowData: Array<ILooseType> = []
 
-  savingsGridOptions: GridOptions = {
-    columnDefs: this.getColumnDefs(0)
-  }
-
-  checkingGridOptions: GridOptions = {
-    columnDefs: this.getColumnDefs(2)
+  gridOptions: GridOptions = {
+    columnDefs: this.getColumnDefsAndStoreAccountsRowData(),
+    suppressColumnVirtualisation: true,
+    onGridReady: () => this.autoSizeAllColumns()
   }
 
   constructor(public accountService: AccountService) { }
 
-  getColumnDefs(columnIndex: number): Array<ColDef> {
+  getColumnDefsAndStoreAccountsRowData(): Array<ColDef> {
     const columnDefs = []
-    const populatingSavingsAccount = columnIndex === 0
-    let accountRow: IAccountData = {}
+    let columnDefsCollected = false
 
     // Ensure the user has already uploaded their accounts spreadsheet
     if (this.accountService.uploadedFile) {
-      for (let i = 0; i < this.accountService.uploadedFile.length; i++) {
-        const row = this.accountService.uploadedFile[i]
-        if (row.length > 0) {
-          if (typeof row[columnIndex] === 'string') {
-            columnDefs.push({ headerName: row[columnIndex], field: `r${i + 1}:c${columnIndex}` })
-          } else if (typeof row[columnIndex] === 'number') {
-            accountRow[`r${i}:c${columnIndex}`] = row[columnIndex]
+      const accountRows = this.accountService.uploadedFile.filter((accountRow: ILooseType) => accountRow.length > 0) // Only parse populated rows
+      for (let rowIndex = 0; rowIndex < accountRows.length; rowIndex++) {
+        const parsedRow = this.accountService.uploadedFile[rowIndex]
+        const gridRow: ILooseType = {}
+        for (let columnIndex = 0; columnIndex < parsedRow.length; columnIndex++) {
+          if (!columnDefsCollected) {
+            // Establish column definition for each grid field value
+            if (columnIndex === 0) columnDefs.push({ headerName: `Account Type`, field: `c${columnIndex}` })
+            else if (columnIndex === 1) columnDefs.push({ headerName: `Last Update`, field: `c${columnIndex}` })
+            else if (typeof parsedRow[columnIndex] === 'string') {
+              if (parsedRow[columnIndex].toLowerCase().includes('ratios')) columnDefs.push({ headerName: `Reminder`, field: `c${columnIndex}` })
+              else columnDefs.push({ headerName: `Category ${Math.round((columnIndex / 2))}`, field: `c${columnIndex}` })
+            }
+            else if (typeof parsedRow[columnIndex] === 'number') columnDefs.push({ headerName: `Category ${Math.round((columnIndex / 2)) - 1} Value`, field: `c${columnIndex}` })
           }
+
+          // Map parsed row field values into unique, key-value grid field values
+          gridRow[`c${columnIndex}`] = parsedRow[columnIndex]
         }
+        this.accountsRowData.push(gridRow)
+        columnDefsCollected = true
       }
-      populatingSavingsAccount ? this.savingsRowData.push(accountRow) : this.checkingRowData.push(accountRow)
+
       this.accountService.userNeedsToUploadAccountsSpreadsheet = false
     } else this.accountService.userNeedsToUploadAccountsSpreadsheet = true
 
     return columnDefs
   }
 
+  autoSizeAllColumns(skipHeader?: boolean) {
+    const allColumnIds: Array<any> = []
+    this.gridOptions.columnApi.getAllColumns().forEach(column => allColumnIds.push(column['colId']))
+    this.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader)
+  }
+
   getCSVExportParams() {
+    // Establish desired CSV export param(s)
     return {
-      suppressQuotes: false,
-      columnSeparator: 'tab',
-      customHeader: null,
-      customFooter: null,
-    };
+      fileName: 'Accounts.csv'
+    }
   }
 
   downloadDataAsCSV() {
     const params = this.getCSVExportParams()
-    this.savingsGridOptions.api.getDataAsCsv(params)
+    this.gridOptions.api.exportDataAsCsv(params)
   }
 }
