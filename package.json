@@ -21,7 +21,7 @@
   "homepage": "https://github.com/amorehead/cense-ionic#readme",
   "dependencies": {
     "@angular/common": "^9.1.9",
-    "@angular/core": "^9.1.9",
+    "@angular/core": "^11.0.5",
     "@angular/forms": "^9.1.9",
     "@angular/platform-browser": "^9.1.9",
     "@angular/router": "^9.1.9",
