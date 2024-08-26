@@ -28,7 +28,7 @@
     "@ionic/angular": "^5.1.1",
     "@ionic/cli": "^6.20.1",
     "ag-grid-angular": "^23.1.1",
-    "ag-grid-community": "^23.1.1",
+    "ag-grid-community": "^31.3.4",
     "bl": "^4.0.3",
     "cordova-res": "^0.15.4",
     "file-saver": "^2.0.2",
